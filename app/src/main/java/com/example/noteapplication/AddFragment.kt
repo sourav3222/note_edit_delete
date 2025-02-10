@@ -30,7 +30,7 @@ class AddFragment : Fragment() {
     ): View? {
         binding = FragmentAddBinding.inflate(inflater,container,false)
 
-        noteId = requireArguments().getInt("note")
+
 
         if (noteId != 0) {
 
