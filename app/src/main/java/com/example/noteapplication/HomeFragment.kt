@@ -10,10 +10,10 @@ import androidx.room.Room
 import com.example.noteapplication.databinding.FragmentHomeBinding
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), NoteAdapter.NoteEdit {
 
     lateinit var binding: FragmentHomeBinding
-    lateinit var dataBase: NoteDatabase
+    lateinit var note: Note
 
 
     override fun onCreateView(
@@ -23,15 +23,18 @@ class HomeFragment : Fragment() {
        binding = FragmentHomeBinding.inflate(inflater,container,false)
 
 
-        dataBase = Room.databaseBuilder(requireActivity(), NoteDatabase::class.java,"Ntoe_DB")
-            .allowMainThreadQueries().build()
 
-        var notes: List<Note> =   dataBase.getNoteDao().getAllData()
+        var notes: List<Note> = NoteDatabase.getDB(requireContext()).getNoteDao().getAllData()
 
-        var ad = NoteAdapter()
-        ad.submitList(notes)
+        notes.let {
 
-        binding.recyclerview.adapter= ad
+            var ad = NoteAdapter(this)
+            ad.submitList(notes)
+
+            binding.recyclerview.adapter= ad
+
+        }
+
 
 
 
@@ -55,5 +58,14 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onNoteEDit(note: Note) {
 
-}
+        var bundle = Bundle()
+        bundle.putInt("note", note.id)
+
+        findNavController().navigate(R.id.action_homeFragment_to_addFragment, bundle)
+
+    }
+    }
+
+

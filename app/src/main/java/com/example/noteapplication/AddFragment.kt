@@ -18,7 +18,10 @@ class AddFragment : Fragment() {
     lateinit var binding: FragmentAddBinding
     var showTime:String? = null
     var showType: String? = null
-    lateinit var dataBase: NoteDatabase
+    lateinit var note: Note
+
+    var noteId = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,17 +29,43 @@ class AddFragment : Fragment() {
     ): View? {
         binding = FragmentAddBinding.inflate(inflater,container,false)
 
-        dataBase = Room.databaseBuilder(requireActivity(), NoteDatabase::class.java,"Ntoe_DB")
-            .allowMainThreadQueries().build()
-
-binding.dateBtn.setOnClickListener{
-    pickdate()
-}
 
 
-binding.timeBtn.setOnClickListener{
-    picktime()
-}
+
+        noteId = requireArguments().getInt("note")
+
+        if (noteId != 0) {
+
+            note = NoteDatabase.getDB(requireContext()).getNoteDao()
+                .loadAllByIds(listOf<Int>(noteId))[0]
+
+            binding.apply {
+
+                titleET.setText(note.titel)
+                timeBtn.setText(note.time)
+                dateBtn.setText(note.date)
+
+            }
+
+        }
+
+
+
+
+
+        binding.dateBtn.setOnClickListener{
+
+            pickdate()
+
+        }
+
+
+
+        binding.timeBtn.setOnClickListener{
+
+            picktime()
+
+        }
 
 
         binding.submitBtn.setOnClickListener {
@@ -45,8 +74,12 @@ binding.timeBtn.setOnClickListener{
             val datestr = showType ?: "00/00/0000"
             val timestr = showTime ?: "00:00"
             val note = Note(titel = titelstr, time = timestr, date = datestr)
-            dataBase.getNoteDao().insertData(note)
-
+            if (noteId == 0){
+                NoteDatabase.getDB(requireContext()).getNoteDao().insertData(note)
+            }else{
+                note.id = noteId
+                NoteDatabase.getDB(requireContext()).getNoteDao().updateData(note)
+            }
 
             findNavController().navigate(R.id.action_addFragment_to_homeFragment)
         }

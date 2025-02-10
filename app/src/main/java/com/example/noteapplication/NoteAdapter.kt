@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapplication.databinding.ItemDesignBinding
 
-class NoteAdapter : ListAdapter<Note, NoteViewHolder>(comperator){
+class NoteAdapter(var noteEdit: NoteEdit) : ListAdapter<Note, NoteViewHolder>(comperator){
+
+    interface NoteEdit{
+        fun onNoteEDit(note: Note)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
 
 
@@ -22,6 +26,12 @@ class NoteAdapter : ListAdapter<Note, NoteViewHolder>(comperator){
                 notetitleTV.text = it.titel
                 dateTV.text = it.date
                 timeTV.text = it.time
+
+            }
+
+            holder.itemView.setOnClickListener{_ ->
+
+               noteEdit.onNoteEDit(it)
 
             }
         }
