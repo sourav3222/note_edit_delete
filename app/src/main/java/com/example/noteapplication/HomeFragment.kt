@@ -16,6 +16,7 @@ class HomeFragment : Fragment(), NoteAdapter.NoteEdit {
     lateinit var note: Note
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,45 +28,34 @@ class HomeFragment : Fragment(), NoteAdapter.NoteEdit {
         var notes: List<Note> = NoteDatabase.getDB(requireContext()).getNoteDao().getAllData()
 
         notes.let {
+            var adapter = NoteAdapter(this)
+            adapter.submitList(notes)
 
-            var ad = NoteAdapter(this)
-            ad.submitList(notes)
-
-            binding.recyclerview.adapter= ad
+            binding.recyclerview.adapter = adapter
 
         }
-
 
 
 
         binding.addBtn.setOnClickListener {
+
+
             findNavController().navigate(R.id.action_homeFragment_to_addFragment)
+
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         return binding.root
     }
 
-    override fun onNoteEDit(note: Note) {
-
+    override fun onNoteEdit(note: Note) {
         var bundle = Bundle()
         bundle.putInt("note", note.id)
 
         findNavController().navigate(R.id.action_homeFragment_to_addFragment, bundle)
 
-    }
+
     }
 
 
+}

@@ -22,6 +22,6 @@ interface NoteDao {
     fun getAllData():List<Note>
 
     @Query("SELECT * FROM Note WHERE id IN (:id)")
-
     fun loadAllByIds(id: List<Int>): List<Note>
+
 }

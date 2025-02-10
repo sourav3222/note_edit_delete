@@ -9,8 +9,10 @@ abstract class NoteDatabase: RoomDatabase() {
 
     abstract fun getNoteDao() : NoteDao
 
+
     companion object{
-        var database: NoteDatabase? = null
+
+        var database : NoteDatabase? = null
 
 
         fun getDB(context: Context) : NoteDatabase{
@@ -32,6 +34,13 @@ abstract class NoteDatabase: RoomDatabase() {
         }
 
 
-
     }
+
+
+
+
+
 }
+
+
+

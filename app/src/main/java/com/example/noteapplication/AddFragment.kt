@@ -15,6 +15,8 @@ import com.example.noteapplication.databinding.FragmentAddBinding
 
 class AddFragment : Fragment() {
 
+
+
     lateinit var binding: FragmentAddBinding
     var showTime:String? = null
     var showType: String? = null
@@ -22,15 +24,11 @@ class AddFragment : Fragment() {
 
     var noteId = 0
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddBinding.inflate(inflater,container,false)
-
-
-
 
         noteId = requireArguments().getInt("note")
 
@@ -48,8 +46,6 @@ class AddFragment : Fragment() {
             }
 
         }
-
-
 
 
 
@@ -81,6 +77,8 @@ class AddFragment : Fragment() {
                 NoteDatabase.getDB(requireContext()).getNoteDao().updateData(note)
             }
 
+
+
             findNavController().navigate(R.id.action_addFragment_to_homeFragment)
         }
 
@@ -88,21 +86,24 @@ class AddFragment : Fragment() {
     }
 
     private fun picktime() {
-        val calendar = Calendar.getInstance()
+        val calendar = java.util.Calendar.getInstance()
 
-        val minute = calendar.get(Calendar.MINUTE)
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(java.util.Calendar.MINUTE)
+        val hour = calendar.get(java.util.Calendar.HOUR_OF_DAY)
 
-        val timePicker =
-            TimePickerDialog(requireActivity(),TimePickerDialog.OnTimeSetListener{ view, hourOfDay, minute->
+        val timePicker = TimePickerDialog(
+            requireActivity(), TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
 
-                showTime = "$hour:$minute"
-
-
+                showTime = "$hourOfDay : $minute"
                 binding.timeBtn.text = showTime
-            }, hour,minute,false
-            )
+
+
+            }, hour, minute, false
+
+        )
         timePicker.show()
+
+
     }
 
     private fun pickdate() {
